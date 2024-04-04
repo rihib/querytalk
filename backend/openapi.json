@@ -1,7 +1,7 @@
 {
-  "openapi":"3.0.2",
+  "openapi":"3.0.3",
   "info": {
-    "title":"QueryTalk",
+    "title":"QueryTalk schema",
     "version":"0.0.1"
   },
   "servers": [
@@ -15,70 +15,74 @@
       "post": {
         "tags": ["talk"],
         "summary":"Send prompt to the server",
+        "operationId": "sendPrompt",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "type":"object",
-                "properties": {
-                  "prompt": {
-                    "type":"string"
-                  }
-                }
+                "$ref":"#/components/schemas/Prompt"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description":"OK",
+            "description":"Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "type":"object",
-                  "properties": {
-                    "visualizableData": {
-                      "type":"string"
-                    }
-                  }
+                  "$ref":"#/components/schemas/VisualizableData"
                 }
               }
             }
           },
-          "400": {
-            "description":"Bad request, invalid JSON",
+          "default": {
+            "description":"Unexpected error",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
-                  "type":"string",
-                  "example":"Failed to decode request"
-                }
-              }
-            }
-          },
-          "405": {
-            "description":"Invalid method",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type":"string",
-                  "example":"Only POST method is allowed"
-                }
-              }
-            }
-          },
-          "413": {
-            "description":"Request body too large",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type":"string",
-                  "example":"Request body too large"
+                  "$ref":"#/components/schemas/Error"
                 }
               }
             }
           }
         }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Prompt": {
+        "type":"object",
+        "required": ["prompt"],
+        "properties": {
+          "prompt": {
+            "type":"string"
+          }
+        }
+      },
+      "VisualizableData": {
+        "type":"object",
+        "required": ["visualizableData"],
+        "properties": {
+          "visualizableData": {
+            "type":"string"
+          }
+        }
+      },
+      "Error": {
+        "description": "Represents error object",
+        "type":"object",
+        "properties": {
+          "code": {
+            "type":"integer",
+            "format":"int64"
+          },
+          "message": {
+            "type":"string"
+          }
+        },
+        "required": ["code", "message"]
       }
     }
   }
