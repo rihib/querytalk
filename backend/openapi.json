@@ -1,0 +1,85 @@
+{
+  "openapi":"3.0.2",
+  "info": {
+    "title":"QueryTalk",
+    "version":"0.0.1"
+  },
+  "servers": [
+    {"url":"https://api.server.test/v0.0.1"}
+  ],
+  "tags": [
+    {"name":"talk"}
+  ],
+  "paths": {
+    "/talk": {
+      "post": {
+        "tags": ["talk"],
+        "summary":"Send prompt to the server",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type":"object",
+                "properties": {
+                  "prompt": {
+                    "type":"string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description":"OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type":"object",
+                  "properties": {
+                    "visualizableData": {
+                      "type":"string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description":"Bad request, invalid JSON",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type":"string",
+                  "example":"Failed to decode request"
+                }
+              }
+            }
+          },
+          "405": {
+            "description":"Invalid method",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type":"string",
+                  "example":"Only POST method is allowed"
+                }
+              }
+            }
+          },
+          "413": {
+            "description":"Request body too large",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type":"string",
+                  "example":"Request body too large"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
