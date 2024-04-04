@@ -9,13 +9,19 @@ import (
 )
 
 type talkService struct{}
+type BadRequestError struct{}
+
+func (e BadRequestError) Error() string {
+	return "Bad Request"
+}
 
 func (s *talkService) SendPrompt(ctx context.Context, req ogen.OptPrompt) (*ogen.VisualizableData, error) {
-	// if !req.Set {
-	// 	return nil, errors.New("no prompt provided")
-	// }
-
 	var res ogen.VisualizableData
+
+	if !req.Set {
+		return &res, BadRequestError{}
+	}
+
 	res.VisualizableData = getVisualizableData(req.Value.Prompt)
 	return &res, nil
 }

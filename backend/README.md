@@ -3,18 +3,20 @@
 ## Generate API Code
 
 ```bash
-go run github.com/ogen-go/ogen/cmd/ogen@latest --target ogen --clean openapi.json
+go run github.com/ogen-go/ogen/cmd/ogen@latest --target ogen --clean api/openapi.json
 ```
 
 ## Run Server
 
 ```bash
-go run main.go internal.go
+go run main.go logic.go
 ```
 
 ## Test
 
 ```bash
-% curl -X "POST" -H "Content-Type: application/json" --data "{\"prompt\":\"Cat\"}" http://localhost:8080/talk
+% curl -X "POST" -H "Content-Type: application/json" --data "{\"prompt\":\"Cat\"}" http://localhost:8080/v0.0.1/talk
 {"visualizableData":"Cat"}%
+% curl -X "POST" -H "Content-Type: application/json" http://localhost:8080/v0.0.1/talk
+{"code":0,"message":"Bad Request"}%
 ```
