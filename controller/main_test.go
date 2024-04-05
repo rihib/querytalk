@@ -18,7 +18,7 @@ func run(ctx context.Context) (*ogen.VisualizableData, error) {
 		return res, fmt.Errorf("create client: %w", err)
 	}
 
-	request := ogen.OptPrompt{Value: ogen.Prompt{Prompt: "Hello!"}, Set: true}
+	request := ogen.OptPrompt{Value: ogen.Prompt{Prompt: "How many users?"}, Set: true}
 	res, err = client.SendPrompt(ctx, request)
 	if err != nil {
 		return res, fmt.Errorf("send prompt: %w", err)
@@ -33,7 +33,7 @@ func TestTalkAPI(t *testing.T) {
 		t.Fatalf("Unexpected error: %+v", err)
 	}
 
-	expected := "Hello! How can I assist you today?"
+	expected := "SELECT COUNT(*) FROM users;"
 	if res.VisualizableData != expected {
 		t.Errorf("Expected: %v, got: %v", expected, res.VisualizableData)
 	}
