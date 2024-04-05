@@ -12,11 +12,13 @@ go run github.com/ogen-go/ogen/cmd/ogen@latest --target ogen --clean api/openapi
 go run main.go handler.go logic.go
 ```
 
-## Test
+## Run Test
 
 ```bash
-% curl -X "POST" -H "Content-Type: application/json" --data "{\"prompt\":\"Cat\"}" http://localhost:8080/v0.0.1/talk
-{"visualizableData":"Cat"}%
+go test -v
+```
+
+```bash
 % curl -X "POST" -H "Content-Type: application/json" http://localhost:8080/v0.0.1/talk
 {"code":0,"message":"Bad Request"}%
 ```

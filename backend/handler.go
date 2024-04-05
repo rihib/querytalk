@@ -2,22 +2,18 @@ package main
 
 import (
 	"context"
+	"fmt"
 
 	ogen "querytalk/ogen"
 )
 
 type talkService struct{}
-type BadRequestError struct{}
-
-func (e BadRequestError) Error() string {
-	return "Bad Request"
-}
 
 func (s *talkService) SendPrompt(ctx context.Context, req ogen.OptPrompt) (*ogen.VisualizableData, error) {
 	var res ogen.VisualizableData
 
 	if !req.Set {
-		return &res, BadRequestError{}
+		return &res, fmt.Errorf("bad request")
 	}
 
 	res.VisualizableData = getVisualizableData(req.Value.Prompt)
