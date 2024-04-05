@@ -112,6 +112,7 @@ func extarctSQL(text string) string {
 	matches := pattern.FindStringSubmatch(text)
 
 	if len(matches) <= 1 {
+		fmt.Println(text)
 		return "Error: No SQL snippet found"
 	}
 	return matches[1]

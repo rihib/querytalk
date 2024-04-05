@@ -7,7 +7,7 @@ sequenceDiagram
   box User System
     actor User
     participant Frontend
-    participant Controller
+    participant Agent
     participant User DB
   end
   box querychat
@@ -17,23 +17,23 @@ sequenceDiagram
   end
 
   User ->> Frontend: Input prompt
-  Note over Frontend, Controller: REST API
-  Frontend ->> Controller: Request
-  Note over Controller, Backend: gRPC
-  Controller ->> Backend: Request
+  Note over Frontend, Agent: REST API
+  Frontend ->> Agent: Request
+  Note over Agent, Backend: gRPC
+  Agent ->> Backend: Request
   Backend ->> DB: Check permission
   DB ->> Backend: Return result
   alt Unauthorized
-    Backend ->> Controller: 401 Error
-    Controller ->> Frontend: 401 Error
+    Backend ->> Agent: 401 Error
+    Agent ->> Frontend: 401 Error
     Frontend ->> User: 401 Error
   end
   Backend ->> LLM: Send prompt
   LLM ->> Backend: Return SQL query
-  Backend ->> Controller: Return SQL query
-  Controller ->> User DB: Execute SQL query
-  User DB ->> Controller: Return result
-  Controller ->> Frontend: Return visualizable data
+  Backend ->> Agent: Return SQL query
+  Agent ->> User DB: Execute SQL query
+  User DB ->> Agent: Return result
+  Agent ->> Frontend: Return visualizable data
   Frontend ->> User: Visualize data
 ```
 
