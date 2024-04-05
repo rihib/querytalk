@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	ogen "querytalk/ogen"
+	ogen "querychat/ogen"
 )
 
 func run(ctx context.Context) (*ogen.VisualizableData, error) {
@@ -27,7 +27,7 @@ func run(ctx context.Context) (*ogen.VisualizableData, error) {
 	return res, nil
 }
 
-func TestTalkAPI(t *testing.T) {
+func TestChatAPI(t *testing.T) {
 	res, err := run(context.Background())
 	if err != nil {
 		t.Fatalf("Unexpected error: %+v", err)

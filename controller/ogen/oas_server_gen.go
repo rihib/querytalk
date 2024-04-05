@@ -12,7 +12,7 @@ type Handler interface {
 	//
 	// Send prompt to the server.
 	//
-	// POST /v0.0.1/talk
+	// POST /v0.0.1/chat
 	SendPrompt(ctx context.Context, req OptPrompt) (*VisualizableData, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//

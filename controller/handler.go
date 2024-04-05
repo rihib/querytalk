@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 
-	ogen "querytalk/ogen"
+	ogen "querychat/ogen"
 )
 
-type talkService struct{}
+type chatService struct{}
 
-func (s *talkService) SendPrompt(ctx context.Context, req ogen.OptPrompt) (*ogen.VisualizableData, error) {
+func (s *chatService) SendPrompt(ctx context.Context, req ogen.OptPrompt) (*ogen.VisualizableData, error) {
 	var res ogen.VisualizableData
 
 	if !req.Set {
@@ -20,6 +20,6 @@ func (s *talkService) SendPrompt(ctx context.Context, req ogen.OptPrompt) (*ogen
 	return &res, nil
 }
 
-func (s *talkService) NewError(ctx context.Context, err error) *ogen.ErrorStatusCode {
+func (s *chatService) NewError(ctx context.Context, err error) *ogen.ErrorStatusCode {
 	return &ogen.ErrorStatusCode{StatusCode: 500, Response: ogen.Error{Message: err.Error()}}
 }

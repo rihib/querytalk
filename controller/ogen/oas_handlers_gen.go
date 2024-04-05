@@ -24,12 +24,12 @@ import (
 //
 // Send prompt to the server.
 //
-// POST /v0.0.1/talk
+// POST /v0.0.1/chat
 func (s *Server) handleSendPromptRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("sendPrompt"),
 		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v0.0.1/talk"),
+		semconv.HTTPRouteKey.String("/v0.0.1/chat"),
 	}
 
 	// Start a span for this request.

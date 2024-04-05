@@ -1,19 +1,19 @@
 {
   "openapi":"3.0.3",
   "info": {
-    "title":"QueryTalk schema",
+    "title":"QueryChat schema",
     "version":"0.0.1"
   },
   "servers": [
     {"url":"https://localhost:8080"}
   ],
   "tags": [
-    {"name":"talk"}
+    {"name":"chat"}
   ],
   "paths": {
-    "/v0.0.1/talk": {
+    "/v0.0.1/chat": {
       "post": {
-        "tags": ["talk"],
+        "tags": ["chat"],
         "summary":"Send prompt to the server",
         "operationId": "sendPrompt",
         "requestBody": {

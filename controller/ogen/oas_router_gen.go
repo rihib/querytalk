@@ -48,9 +48,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/v0.0.1/talk"
+		case '/': // Prefix: "/v0.0.1/chat"
 			origElem := elem
-			if l := len("/v0.0.1/talk"); len(elem) >= l && elem[0:l] == "/v0.0.1/talk" {
+			if l := len("/v0.0.1/chat"); len(elem) >= l && elem[0:l] == "/v0.0.1/chat" {
 				elem = elem[l:]
 			} else {
 				break
@@ -149,9 +149,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/v0.0.1/talk"
+		case '/': // Prefix: "/v0.0.1/chat"
 			origElem := elem
-			if l := len("/v0.0.1/talk"); len(elem) >= l && elem[0:l] == "/v0.0.1/talk" {
+			if l := len("/v0.0.1/chat"); len(elem) >= l && elem[0:l] == "/v0.0.1/chat" {
 				elem = elem[l:]
 			} else {
 				break
@@ -164,7 +164,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					r.name = "SendPrompt"
 					r.summary = "Send prompt to the server"
 					r.operationID = "sendPrompt"
-					r.pathPattern = "/v0.0.1/talk"
+					r.pathPattern = "/v0.0.1/chat"
 					r.args = args
 					r.count = 0
 					return r, true

@@ -17,7 +17,7 @@ var _ Handler = UnimplementedHandler{}
 //
 // Send prompt to the server.
 //
-// POST /v0.0.1/talk
+// POST /v0.0.1/chat
 func (UnimplementedHandler) SendPrompt(ctx context.Context, req OptPrompt) (r *VisualizableData, _ error) {
 	return r, ht.ErrNotImplemented
 }

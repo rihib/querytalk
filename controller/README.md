@@ -19,6 +19,6 @@ go test -v
 ```
 
 ```bash
-% curl -X "POST" -H "Content-Type: application/json" http://localhost:8080/v0.0.1/talk
+% curl -X "POST" -H "Content-Type: application/json" http://localhost:8080/v0.0.1/chat
 {"code":0,"message":"Bad Request"}%
 ```

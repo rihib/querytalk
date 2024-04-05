@@ -1,4 +1,4 @@
-# QueryTalk
+# QueryChat
 
 ## Sequence Diagram
 
@@ -10,7 +10,7 @@ sequenceDiagram
     participant Controller
     participant User DB
   end
-  box QueryTalk
+  box querychat
     participant Backend
     participant LLM
     participant DB

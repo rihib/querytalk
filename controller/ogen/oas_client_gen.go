@@ -26,7 +26,7 @@ type Invoker interface {
 	//
 	// Send prompt to the server.
 	//
-	// POST /v0.0.1/talk
+	// POST /v0.0.1/chat
 	SendPrompt(ctx context.Context, request OptPrompt) (*VisualizableData, error)
 }
 
@@ -86,7 +86,7 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 //
 // Send prompt to the server.
 //
-// POST /v0.0.1/talk
+// POST /v0.0.1/chat
 func (c *Client) SendPrompt(ctx context.Context, request OptPrompt) (*VisualizableData, error) {
 	res, err := c.sendSendPrompt(ctx, request)
 	return res, err
@@ -96,7 +96,7 @@ func (c *Client) sendSendPrompt(ctx context.Context, request OptPrompt) (res *Vi
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("sendPrompt"),
 		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v0.0.1/talk"),
+		semconv.HTTPRouteKey.String("/v0.0.1/chat"),
 	}
 
 	// Run stopwatch.
@@ -129,7 +129,7 @@ func (c *Client) sendSendPrompt(ctx context.Context, request OptPrompt) (res *Vi
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
-	pathParts[0] = "/v0.0.1/talk"
+	pathParts[0] = "/v0.0.1/chat"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"

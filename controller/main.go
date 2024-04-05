@@ -4,11 +4,11 @@ import (
 	"log/slog"
 	"net/http"
 
-	ogen "querytalk/ogen"
+	ogen "querychat/ogen"
 )
 
 func main() {
-	service := &talkService{}
+	service := &chatService{}
 	srv, err := ogen.NewServer(service)
 	if err != nil {
 		slog.Error(err.Error())
