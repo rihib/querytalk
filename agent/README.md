@@ -9,7 +9,7 @@ go run github.com/ogen-go/ogen/cmd/ogen@latest --target ogen --clean api/openapi
 ## Run Server
 
 ```bash
-go run main.go handler.go logic.go
+go run main.go handler.go agent.go backend.go llm.go
 ```
 
 ## Run Test
