@@ -8,33 +8,37 @@ import (
 	ogen "querychat/ogen"
 )
 
-func run(ctx context.Context) (*ogen.VisualizableData, error) {
-	BaseURL := "http://localhost:8080"
+const (
+	BASEURL = "http://localhost:8080"
+)
 
-	var res *ogen.VisualizableData
+func run(ctx context.Context, prompt string) (*ogen.VisualizableData, error) {
+	var r *ogen.VisualizableData
 
-	client, err := ogen.NewClient(BaseURL)
+	c, err := ogen.NewClient(BASEURL)
 	if err != nil {
-		return res, fmt.Errorf("create client: %w", err)
+		return r, fmt.Errorf("create client: %w", err)
 	}
 
-	request := ogen.OptPrompt{Value: ogen.Prompt{Prompt: "How many users?"}, Set: true}
-	res, err = client.SendPrompt(ctx, request)
+	request := ogen.OptPrompt{Value: ogen.Prompt{Prompt: prompt}, Set: true}
+	r, err = c.SendPrompt(ctx, request)
 	if err != nil {
-		return res, fmt.Errorf("send prompt: %w", err)
+		return r, fmt.Errorf("send prompt: %w", err)
 	}
 
-	return res, nil
+	return r, nil
 }
 
 func TestChatAPI(t *testing.T) {
-	res, err := run(context.Background())
+	p := "How many users?"
+	e := "SELECT COUNT(*) FROM users;"
+
+	r, err := run(context.Background(), p)
 	if err != nil {
 		t.Fatalf("Unexpected error: %+v", err)
 	}
 
-	expected := "SELECT COUNT(*) FROM users;"
-	if res.VisualizableData != expected {
-		t.Errorf("Expected: %v, got: %v", expected, res.VisualizableData)
+	if r.VisualizableData != e {
+		t.Errorf("Test Failed: got `%v` expected `%v`", r.VisualizableData, e)
 	}
 }

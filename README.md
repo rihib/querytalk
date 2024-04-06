@@ -29,7 +29,7 @@ sequenceDiagram
     Frontend ->> User: Error Message
   end
   Backend ->> LLM: Send tuned prompt
-  LLM ->> Backend: Answer
+  LLM ->> Backend: Output
   Backend ->> Agent: SQL query
   Agent ->> User DB: Execute SQL query
   User DB ->> Agent: Result
