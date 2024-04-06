@@ -4,13 +4,13 @@
 
 ```mermaid
 sequenceDiagram
+  actor User
   box User System
-    actor User
     participant Frontend
     participant Agent
     participant User DB
   end
-  box querychat
+  box QueryChat System
     participant Backend
     participant LLM
     participant DB
@@ -18,23 +18,23 @@ sequenceDiagram
 
   User ->> Frontend: Input prompt
   Note over Frontend, Agent: REST API
-  Frontend ->> Agent: Request
+  Frontend ->> Agent: Request (prompt)
   Note over Agent, Backend: gRPC
-  Agent ->> Backend: Request
+  Agent ->> Backend: Request (prompt, schema)
   Backend ->> DB: Check permission
   DB ->> Backend: Return result
   alt Unauthorized
     Backend ->> Agent: 401 Error
     Agent ->> Frontend: 401 Error
-    Frontend ->> User: 401 Error
+    Frontend ->> User: Error Message
   end
-  Backend ->> LLM: Send prompt
+  Backend ->> LLM: Send tuned prompt
   LLM ->> Backend: Return SQL query
   Backend ->> Agent: Return SQL query
   Agent ->> User DB: Execute SQL query
   User DB ->> Agent: Return result
   Agent ->> Frontend: Return visualizable data
-  Frontend ->> User: Visualize data
+  Frontend ->> User: Visualized data
 ```
 
 ## Technologies
@@ -45,18 +45,34 @@ sequenceDiagram
 - Next.js
 - shadcn/ui
 
-### Backend
+### Agent
 
 - Go
 - ogen
 - REST API
 - OpenAPI
 - gRPC
+- Docker
+
+### Backend
+
+- Go
+- ogen
+- gRPC
 - dockertest
 - sqlc
-- MySQL
 - Docker
 - redis
+
+### LLM
+
+- Python
+- FastAPI
+- OpenAI
+
+### Database
+
+- MySQL
 
 ### DevOps
 
@@ -86,7 +102,7 @@ Treat commit messages as Pull Request equivalents. Commit message format is as f
 ```plaintext
 <type>(<issue title & id>): <description>
 
-[body]
+<body>
 ```
 
 - Commit titles should begin with a lowercase letter
