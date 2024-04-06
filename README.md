@@ -16,24 +16,24 @@ sequenceDiagram
     participant DB
   end
 
-  User ->> Frontend: Input prompt
+  User ->> Frontend: Send prompt
   Note over Frontend, Agent: REST API
   Frontend ->> Agent: Request (prompt)
   Note over Agent, Backend: gRPC
-  Agent ->> Backend: Request (prompt, schema)
+  Agent ->> Backend: Request (schema, prompt)
   Backend ->> DB: Check permission
-  DB ->> Backend: Return result
+  DB ->> Backend: Result
   alt Unauthorized
     Backend ->> Agent: 401 Error
     Agent ->> Frontend: 401 Error
     Frontend ->> User: Error Message
   end
   Backend ->> LLM: Send tuned prompt
-  LLM ->> Backend: Return SQL query
-  Backend ->> Agent: Return SQL query
+  LLM ->> Backend: Answer
+  Backend ->> Agent: SQL query
   Agent ->> User DB: Execute SQL query
-  User DB ->> Agent: Return result
-  Agent ->> Frontend: Return visualizable data
+  User DB ->> Agent: Result
+  Agent ->> Frontend: Visualizable data
   Frontend ->> User: Visualized data
 ```
 
