@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log/slog"
+	"log"
 	"net/http"
 
 	ogen "querychat/ogen"
@@ -9,11 +9,14 @@ import (
 
 func main() {
 	service := &chatService{}
-	srv, err := ogen.NewServer(service)
+
+	s, err := ogen.NewServer(service)
 	if err != nil {
-		slog.Error(err.Error())
+		log.Fatal(err)
 	}
-	if err := http.ListenAndServe(":8080", srv); err != nil {
-		slog.Error(err.Error())
+
+	err = http.ListenAndServe(":8080", s)
+	if err != nil {
+		log.Fatal(err)
 	}
 }
