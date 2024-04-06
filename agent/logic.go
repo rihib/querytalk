@@ -12,51 +12,13 @@ import (
 )
 
 func readSchema() string {
-	schema := `
-	tables:
-  - name: users
-    columns:
-      - name: id
-        type: int
-        primaryKey: true
-      - name: username
-        type: varchar(255)
-      - name: email
-        type: varchar(255)
-      - name: created_at
-        type: datetime
+	filePath := "schema.yaml"
+	content, err := os.ReadFile(filePath)
+	if err != nil {
+		log.Fatalf("Failed to read file: %v", err)
+	}
 
-  - name: posts
-    columns:
-      - name: id
-        type: int
-        primaryKey: true
-      - name: user_id
-        type: int
-        foreignKey: users.id
-      - name: title
-        type: varchar(255)
-      - name: body
-        type: text
-      - name: created_at
-        type: datetime
-
-  - name: comments
-    columns:
-      - name: id
-        type: int
-        primaryKey: true
-      - name: post_id
-        type: int
-        foreignKey: posts.id
-      - name: user_id
-        type: int
-        foreignKey: users.id
-      - name: comment
-        type: text
-      - name: created_at
-        type: datetime
-	`
+	schema := string(content)
 	return schema
 }
 
