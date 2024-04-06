@@ -8,12 +8,12 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
-	// SendPrompt implements sendPrompt operation.
+	// SendMSG implements sendMSG operation.
 	//
-	// Send prompt to the server.
+	// Send message to the server.
 	//
 	// POST /v0.0.1/chat
-	SendPrompt(ctx context.Context, req OptPrompt) (*VisualizableData, error)
+	SendMSG(ctx context.Context, req OptMSG) (*VisualizableData, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

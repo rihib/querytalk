@@ -13,12 +13,12 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
-// SendPrompt implements sendPrompt operation.
+// SendMSG implements sendMSG operation.
 //
-// Send prompt to the server.
+// Send message to the server.
 //
 // POST /v0.0.1/chat
-func (UnimplementedHandler) SendPrompt(ctx context.Context, req OptPrompt) (r *VisualizableData, _ error) {
+func (UnimplementedHandler) SendMSG(ctx context.Context, req OptMSG) (r *VisualizableData, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

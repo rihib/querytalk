@@ -22,12 +22,12 @@ import (
 
 // Invoker invokes operations described by OpenAPI v3 specification.
 type Invoker interface {
-	// SendPrompt invokes sendPrompt operation.
+	// SendMSG invokes sendMSG operation.
 	//
-	// Send prompt to the server.
+	// Send message to the server.
 	//
 	// POST /v0.0.1/chat
-	SendPrompt(ctx context.Context, request OptPrompt) (*VisualizableData, error)
+	SendMSG(ctx context.Context, request OptMSG) (*VisualizableData, error)
 }
 
 // Client implements OAS client.
@@ -82,19 +82,19 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 	return u
 }
 
-// SendPrompt invokes sendPrompt operation.
+// SendMSG invokes sendMSG operation.
 //
-// Send prompt to the server.
+// Send message to the server.
 //
 // POST /v0.0.1/chat
-func (c *Client) SendPrompt(ctx context.Context, request OptPrompt) (*VisualizableData, error) {
-	res, err := c.sendSendPrompt(ctx, request)
+func (c *Client) SendMSG(ctx context.Context, request OptMSG) (*VisualizableData, error) {
+	res, err := c.sendSendMSG(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendSendPrompt(ctx context.Context, request OptPrompt) (res *VisualizableData, err error) {
+func (c *Client) sendSendMSG(ctx context.Context, request OptMSG) (res *VisualizableData, err error) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("sendPrompt"),
+		otelogen.OperationID("sendMSG"),
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/v0.0.1/chat"),
 	}
@@ -111,7 +111,7 @@ func (c *Client) sendSendPrompt(ctx context.Context, request OptPrompt) (res *Vi
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "SendPrompt",
+	ctx, span := c.cfg.Tracer.Start(ctx, "SendMSG",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -137,7 +137,7 @@ func (c *Client) sendSendPrompt(ctx context.Context, request OptPrompt) (res *Vi
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
-	if err := encodeSendPromptRequest(request, r); err != nil {
+	if err := encodeSendMSGRequest(request, r); err != nil {
 		return res, errors.Wrap(err, "encode request")
 	}
 
@@ -149,7 +149,7 @@ func (c *Client) sendSendPrompt(ctx context.Context, request OptPrompt) (res *Vi
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeSendPromptResponse(resp)
+	result, err := decodeSendMSGResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

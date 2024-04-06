@@ -6,6 +6,19 @@
 go run github.com/ogen-go/ogen/cmd/ogen@latest --target ogen --clean api/openapi.json
 ```
 
+## Create schema.sql
+
+```bash
+$ brew install sqlite
+$ sqlite3 chinook.db
+sqlite> .tables
+albums          employees       invoices        playlists
+artists         genres          media_types     tracks
+customers       invoice_items   playlist_track
+sqlite> .schema  # Copy schema to schema.sql
+sqlite> .exit
+```
+
 ## Run Server
 
 ```bash

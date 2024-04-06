@@ -11,8 +11,8 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
-func encodeSendPromptRequest(
-	req OptPrompt,
+func encodeSendMSGRequest(
+	req OptMSG,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

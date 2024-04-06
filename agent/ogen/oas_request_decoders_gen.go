@@ -15,8 +15,8 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func (s *Server) decodeSendPromptRequest(r *http.Request) (
-	req OptPrompt,
+func (s *Server) decodeSendMSGRequest(r *http.Request) (
+	req OptMSG,
 	close func() error,
 	rerr error,
 ) {
@@ -58,7 +58,7 @@ func (s *Server) decodeSendPromptRequest(r *http.Request) (
 
 		d := jx.DecodeBytes(buf)
 
-		var request OptPrompt
+		var request OptMSG
 		if err := func() error {
 			request.Reset()
 			if err := request.Decode(d); err != nil {

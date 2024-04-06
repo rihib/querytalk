@@ -14,7 +14,7 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func decodeSendPromptResponse(resp *http.Response) (res *VisualizableData, _ error) {
+func decodeSendMSGResponse(resp *http.Response) (res *VisualizableData, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.

@@ -20,20 +20,20 @@ import (
 	"github.com/ogen-go/ogen/otelogen"
 )
 
-// handleSendPromptRequest handles sendPrompt operation.
+// handleSendMSGRequest handles sendMSG operation.
 //
-// Send prompt to the server.
+// Send message to the server.
 //
 // POST /v0.0.1/chat
-func (s *Server) handleSendPromptRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+func (s *Server) handleSendMSGRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("sendPrompt"),
+		otelogen.OperationID("sendMSG"),
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/v0.0.1/chat"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "SendPrompt",
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "SendMSG",
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -58,11 +58,11 @@ func (s *Server) handleSendPromptRequest(args [0]string, argsEscaped bool, w htt
 		}
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: "SendPrompt",
-			ID:   "sendPrompt",
+			Name: "SendMSG",
+			ID:   "sendMSG",
 		}
 	)
-	request, close, err := s.decodeSendPromptRequest(r)
+	request, close, err := s.decodeSendMSGRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -82,16 +82,16 @@ func (s *Server) handleSendPromptRequest(args [0]string, argsEscaped bool, w htt
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    "SendPrompt",
-			OperationSummary: "Send prompt to the server",
-			OperationID:      "sendPrompt",
+			OperationName:    "SendMSG",
+			OperationSummary: "Send message to the server",
+			OperationID:      "sendMSG",
 			Body:             request,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
 
 		type (
-			Request  = OptPrompt
+			Request  = OptMSG
 			Params   = struct{}
 			Response = *VisualizableData
 		)
@@ -104,12 +104,12 @@ func (s *Server) handleSendPromptRequest(args [0]string, argsEscaped bool, w htt
 			mreq,
 			nil,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.SendPrompt(ctx, request)
+				response, err = s.h.SendMSG(ctx, request)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.SendPrompt(ctx, request)
+		response, err = s.h.SendMSG(ctx, request)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -128,7 +128,7 @@ func (s *Server) handleSendPromptRequest(args [0]string, argsEscaped bool, w htt
 		return
 	}
 
-	if err := encodeSendPromptResponse(response, w, span); err != nil {
+	if err := encodeSendMSGResponse(response, w, span); err != nil {
 		recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

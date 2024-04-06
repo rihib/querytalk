@@ -10,6 +10,9 @@ import (
 	"golang.org/x/exp/slog"
 )
 
+// FIXME: Use go routines to call LLM asynchronously
+// FIXME: Clean Architecture
+
 func gpt4(sysPrompt string, userPrompt string) (string, error) {
 	var output string
 
@@ -44,6 +47,6 @@ func gpt4(sysPrompt string, userPrompt string) (string, error) {
 	}
 
 	output = resp.Choices[0].Message.Content
-	slog.Debug("openai chat completion response", "output", output)
+	slog.Info("openai chat completion response", "output", output)
 	return output, nil
 }

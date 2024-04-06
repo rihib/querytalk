@@ -14,13 +14,13 @@
     "/v0.0.1/chat": {
       "post": {
         "tags": ["chat"],
-        "summary":"Send prompt to the server",
-        "operationId": "sendPrompt",
+        "summary":"Send message to the server",
+        "operationId": "sendMSG",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref":"#/components/schemas/Prompt"
+                "$ref":"#/components/schemas/MSG"
               }
             }
           }
@@ -52,10 +52,13 @@
   },
   "components": {
     "schemas": {
-      "Prompt": {
+      "MSG": {
         "type":"object",
-        "required": ["prompt"],
+        "required": ["dbType, prompt"],
         "properties": {
+          "dbType": {
+            "type":"string"
+          },
           "prompt": {
             "type":"string"
           }

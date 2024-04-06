@@ -20,7 +20,7 @@ sequenceDiagram
   Note over Frontend, Agent: REST API
   Frontend ->> Agent: Request (prompt)
   Note over Agent, Backend: gRPC
-  Agent ->> Backend: Request (schema, prompt)
+  Agent ->> Backend: Request (dbType, schema, prompt)
   Backend ->> DB: Check permission
   DB ->> Backend: Result
   alt Unauthorized

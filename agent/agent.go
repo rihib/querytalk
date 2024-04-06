@@ -6,8 +6,11 @@ import (
 	"os"
 )
 
+// FIXME: Clean Architecture
+// TODO: Use MySQL, PostgreSQL, and SQLite sample databases
+
 const (
-	SCHEMA_FILE_PATH = "schema.yaml"
+	SCHEMA_FILE_PATH = "schema.sql"
 )
 
 func readFile(filePath string) (string, error) {
@@ -30,7 +33,7 @@ func createVisualizableData(data string) (string, error) {
 	return visualizableData, nil
 }
 
-func getVisualizableData(prompt string) (string, error) {
+func getVisualizableData(dbType string, prompt string) (string, error) {
 	var vd string
 
 	schema, err := readFile(SCHEMA_FILE_PATH)
@@ -38,7 +41,7 @@ func getVisualizableData(prompt string) (string, error) {
 		return vd, err
 	}
 
-	sql, err := createQuery(schema, prompt)
+	sql, err := createQuery(dbType, schema, prompt)
 	if err != nil {
 		return vd, err
 	}

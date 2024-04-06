@@ -63,38 +63,64 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 	s.Response = val
 }
 
-// NewOptPrompt returns new OptPrompt with value set to v.
-func NewOptPrompt(v Prompt) OptPrompt {
-	return OptPrompt{
+// Ref: #/components/schemas/MSG
+type MSG struct {
+	DbType OptString `json:"dbType"`
+	Prompt OptString `json:"prompt"`
+}
+
+// GetDbType returns the value of DbType.
+func (s *MSG) GetDbType() OptString {
+	return s.DbType
+}
+
+// GetPrompt returns the value of Prompt.
+func (s *MSG) GetPrompt() OptString {
+	return s.Prompt
+}
+
+// SetDbType sets the value of DbType.
+func (s *MSG) SetDbType(val OptString) {
+	s.DbType = val
+}
+
+// SetPrompt sets the value of Prompt.
+func (s *MSG) SetPrompt(val OptString) {
+	s.Prompt = val
+}
+
+// NewOptMSG returns new OptMSG with value set to v.
+func NewOptMSG(v MSG) OptMSG {
+	return OptMSG{
 		Value: v,
 		Set:   true,
 	}
 }
 
-// OptPrompt is optional Prompt.
-type OptPrompt struct {
-	Value Prompt
+// OptMSG is optional MSG.
+type OptMSG struct {
+	Value MSG
 	Set   bool
 }
 
-// IsSet returns true if OptPrompt was set.
-func (o OptPrompt) IsSet() bool { return o.Set }
+// IsSet returns true if OptMSG was set.
+func (o OptMSG) IsSet() bool { return o.Set }
 
 // Reset unsets value.
-func (o *OptPrompt) Reset() {
-	var v Prompt
+func (o *OptMSG) Reset() {
+	var v MSG
 	o.Value = v
 	o.Set = false
 }
 
 // SetTo sets value to v.
-func (o *OptPrompt) SetTo(v Prompt) {
+func (o *OptMSG) SetTo(v MSG) {
 	o.Set = true
 	o.Value = v
 }
 
 // Get returns value and boolean that denotes whether value was set.
-func (o OptPrompt) Get() (v Prompt, ok bool) {
+func (o OptMSG) Get() (v MSG, ok bool) {
 	if !o.Set {
 		return v, false
 	}
@@ -102,26 +128,57 @@ func (o OptPrompt) Get() (v Prompt, ok bool) {
 }
 
 // Or returns value if set, or given parameter if does not.
-func (o OptPrompt) Or(d Prompt) Prompt {
+func (o OptMSG) Or(d MSG) MSG {
 	if v, ok := o.Get(); ok {
 		return v
 	}
 	return d
 }
 
-// Ref: #/components/schemas/Prompt
-type Prompt struct {
-	Prompt string `json:"prompt"`
+// NewOptString returns new OptString with value set to v.
+func NewOptString(v string) OptString {
+	return OptString{
+		Value: v,
+		Set:   true,
+	}
 }
 
-// GetPrompt returns the value of Prompt.
-func (s *Prompt) GetPrompt() string {
-	return s.Prompt
+// OptString is optional string.
+type OptString struct {
+	Value string
+	Set   bool
 }
 
-// SetPrompt sets the value of Prompt.
-func (s *Prompt) SetPrompt(val string) {
-	s.Prompt = val
+// IsSet returns true if OptString was set.
+func (o OptString) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptString) Reset() {
+	var v string
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptString) SetTo(v string) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptString) Get() (v string, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptString) Or(d string) string {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
 }
 
 // Ref: #/components/schemas/VisualizableData

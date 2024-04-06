@@ -6,6 +6,8 @@ import (
 	"regexp"
 )
 
+// FIXME: Clean Architecture
+
 const (
 	SYS_PROMPT  = "This is the database schema:\n\n```\n%s\n```\n\n"
 	USER_PROMPT = `
@@ -19,8 +21,8 @@ func createSysPrompt(schema string) string {
 	return fmt.Sprintf(SYS_PROMPT, schema)
 }
 
-func createUserPrompt(prompt string) string {
-	return fmt.Sprintf(USER_PROMPT, "MySQL 5.7", prompt)
+func createUserPrompt(dbType string, prompt string) string {
+	return fmt.Sprintf(USER_PROMPT, dbType, prompt)
 }
 
 func extarctQuery(output string) (string, error) {
@@ -35,11 +37,11 @@ func extarctQuery(output string) (string, error) {
 	return matches[1], nil
 }
 
-func createQuery(schema string, prompt string) (string, error) {
+func createQuery(dbType string, schema string, prompt string) (string, error) {
 	var sql string
 
 	sp := createSysPrompt(schema)
-	up := createUserPrompt(prompt)
+	up := createUserPrompt(dbType, prompt)
 
 	output, err := gpt4(sp, up)
 	if err != nil {

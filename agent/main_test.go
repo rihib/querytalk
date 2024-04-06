@@ -14,7 +14,7 @@ const (
 	BASEURL = "http://localhost:8080"
 )
 
-func run(ctx context.Context, prompt string) (*ogen.VisualizableData, error) {
+func run(ctx context.Context, dbType string, prompt string) (*ogen.VisualizableData, error) {
 	var r *ogen.VisualizableData
 
 	c, err := ogen.NewClient(BASEURL)
@@ -22,8 +22,14 @@ func run(ctx context.Context, prompt string) (*ogen.VisualizableData, error) {
 		return r, fmt.Errorf("create client: %w", err)
 	}
 
-	request := ogen.OptPrompt{Value: ogen.Prompt{Prompt: prompt}, Set: true}
-	r, err = c.SendPrompt(ctx, request)
+	request := ogen.OptMSG{
+		Value: ogen.MSG{
+			DbType: ogen.OptString{Value: dbType, Set: true},
+			Prompt: ogen.OptString{Value: prompt, Set: true},
+		},
+		Set: true,
+	}
+	r, err = c.SendMSG(ctx, request)
 	if err != nil {
 		return r, fmt.Errorf("send prompt: %w", err)
 	}
@@ -32,10 +38,11 @@ func run(ctx context.Context, prompt string) (*ogen.VisualizableData, error) {
 }
 
 func TestChatAPI(t *testing.T) {
-	p := "How many users?"
-	e := "SELECT COUNT(*) FROM users;"
+	d := "SQLite3"
+	p := "How many customers?"
+	e := "SELECT COUNT(*) FROM customers;"
 
-	r, err := run(context.Background(), p)
+	r, err := run(context.Background(), d, p)
 	if err != nil {
 		t.Fatalf("unexpected error: %+v", err)
 	}

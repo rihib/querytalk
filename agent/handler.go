@@ -10,7 +10,7 @@ import (
 
 type chatService struct{}
 
-func (s *chatService) SendPrompt(ctx context.Context, req ogen.OptPrompt) (*ogen.VisualizableData, error) {
+func (s *chatService) SendMSG(ctx context.Context, req ogen.OptMSG) (*ogen.VisualizableData, error) {
 	var res ogen.VisualizableData
 
 	if !req.Set {
@@ -18,7 +18,7 @@ func (s *chatService) SendPrompt(ctx context.Context, req ogen.OptPrompt) (*ogen
 		return &res, fmt.Errorf("prompt not set")
 	}
 
-	vd, err := getVisualizableData(req.Value.Prompt)
+	vd, err := getVisualizableData(req.Value.DbType.Value, req.Value.Prompt.Value)
 	if err != nil {
 		return &res, err
 	}

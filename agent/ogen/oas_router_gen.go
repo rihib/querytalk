@@ -60,7 +60,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				// Leaf node.
 				switch r.Method {
 				case "POST":
-					s.handleSendPromptRequest([0]string{}, elemIsEscaped, w, r)
+					s.handleSendMSGRequest([0]string{}, elemIsEscaped, w, r)
 				default:
 					s.notAllowed(w, r, "POST")
 				}
@@ -160,10 +160,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			if len(elem) == 0 {
 				switch method {
 				case "POST":
-					// Leaf: SendPrompt
-					r.name = "SendPrompt"
-					r.summary = "Send prompt to the server"
-					r.operationID = "sendPrompt"
+					// Leaf: SendMSG
+					r.name = "SendMSG"
+					r.summary = "Send message to the server"
+					r.operationID = "sendMSG"
 					r.pathPattern = "/v0.0.1/chat"
 					r.args = args
 					r.count = 0
