@@ -8,6 +8,8 @@ import (
 	ogen "querychat/ogen"
 )
 
+// TODO: Create comprehensive tests for chat API
+
 const (
 	BASEURL = "http://localhost:8080"
 )
@@ -35,10 +37,10 @@ func TestChatAPI(t *testing.T) {
 
 	r, err := run(context.Background(), p)
 	if err != nil {
-		t.Fatalf("Unexpected error: %+v", err)
+		t.Fatalf("unexpected error: %+v", err)
 	}
 
 	if r.VisualizableData != e {
-		t.Errorf("Test Failed: got `%v` expected `%v`", r.VisualizableData, e)
+		t.Errorf("test failed: got `%v` expected `%v`", r.VisualizableData, e)
 	}
 }

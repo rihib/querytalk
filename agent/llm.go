@@ -3,23 +3,26 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/joho/godotenv"
 	openai "github.com/sashabaranov/go-openai"
+	"golang.org/x/exp/slog"
 )
 
 func gpt4(sysPrompt string, userPrompt string) (string, error) {
+	var output string
+
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		slog.Error("error loading .env file", "message", err.Error())
+		return output, fmt.Errorf("error loading .env file: %v", err)
 	}
 
 	OPENAI_API_KEY := os.Getenv("OPENAI_API_KEY")
+	c := openai.NewClient(OPENAI_API_KEY)
 
-	client := openai.NewClient(OPENAI_API_KEY)
-	resp, err := client.CreateChatCompletion(
+	resp, err := c.CreateChatCompletion(
 		context.Background(),
 		openai.ChatCompletionRequest{
 			Model: openai.GPT4,
@@ -35,10 +38,12 @@ func gpt4(sysPrompt string, userPrompt string) (string, error) {
 			},
 		},
 	)
-
 	if err != nil {
-		return "", fmt.Errorf("ChatCompletion error: %v", err)
+		slog.Warn("openai chat completion error", "message", err.Error())
+		return output, fmt.Errorf("openai chat completion error: %v", err)
 	}
 
-	return resp.Choices[0].Message.Content, nil
+	output = resp.Choices[0].Message.Content
+	slog.Debug("openai chat completion response", "output", output)
+	return output, nil
 }

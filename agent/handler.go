@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log/slog"
 
 	ogen "querychat/ogen"
 )
@@ -13,13 +14,20 @@ func (s *chatService) SendPrompt(ctx context.Context, req ogen.OptPrompt) (*ogen
 	var res ogen.VisualizableData
 
 	if !req.Set {
-		return &res, fmt.Errorf("bad request")
+		slog.Info("prompt not set")
+		return &res, fmt.Errorf("prompt not set")
 	}
 
-	res.VisualizableData = getVisualizableData(req.Value.Prompt)
+	vd, err := getVisualizableData(req.Value.Prompt)
+	if err != nil {
+		return &res, err
+	}
+
+	res.VisualizableData = vd
 	return &res, nil
 }
 
 func (s *chatService) NewError(ctx context.Context, err error) *ogen.ErrorStatusCode {
-	return &ogen.ErrorStatusCode{StatusCode: 500, Response: ogen.Error{Message: err.Error()}}
+	slog.Error("internal server error", "message", err.Error())
+	return &ogen.ErrorStatusCode{StatusCode: 500, Response: ogen.Error{Code: 0, Message: "internal server error"}}
 }

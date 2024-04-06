@@ -2,16 +2,17 @@ package main
 
 import (
 	"fmt"
+	"log/slog"
 	"regexp"
 )
 
 const (
 	SYS_PROMPT  = "This is the database schema:\n\n```\n%s\n```\n\n"
 	USER_PROMPT = `
-		Create a mysql 5.7 query for '%s'.
-		Use only tables, columns and relationships in the database schema.
-		Answer in short.
-	`
+		Given the database schema, create a %s query for '%s'.
+		- Use only the tables, columns, and relationships described in the schema.
+		- Provide the query in a short, concise format.
+	` + "- Enclose the SQL query within triple backticks (```) and prefix it with 'sql', like so: ```sql"
 )
 
 func createSysPrompt(schema string) string {
@@ -19,26 +20,36 @@ func createSysPrompt(schema string) string {
 }
 
 func createUserPrompt(prompt string) string {
-	return fmt.Sprintf(USER_PROMPT, prompt)
+	return fmt.Sprintf(USER_PROMPT, "MySQL 5.7", prompt)
 }
 
-func extarctQuery(text string) string {
+func extarctQuery(output string) (string, error) {
 	pattern := regexp.MustCompile("(?s)```sql\n(.+?)\n```")
-	matches := pattern.FindStringSubmatch(text)
+	matches := pattern.FindStringSubmatch(output)
 
 	if len(matches) <= 1 {
-		return "Error: No SQL snippet found"
+		slog.Info("query not found", "output", output)
+		return "", fmt.Errorf("query not found")
 	}
-	return matches[1]
+
+	return matches[1], nil
 }
 
-func createQuery(schema string, prompt string) string {
+func createQuery(schema string, prompt string) (string, error) {
+	var sql string
+
 	sp := createSysPrompt(schema)
 	up := createUserPrompt(prompt)
-	text, ok := gpt4(sp, up)
-	sql := extarctQuery(text)
-	if ok != nil {
-		return "Error: Could not generate SQL"
+
+	output, err := gpt4(sp, up)
+	if err != nil {
+		return sql, err
 	}
-	return sql
+
+	sql, err = extarctQuery(output)
+	if err != nil {
+		return sql, err
+	}
+
+	return sql, nil
 }

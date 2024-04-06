@@ -1,41 +1,57 @@
 package main
 
 import (
-	"log"
+	"fmt"
+	"log/slog"
 	"os"
 )
-
-// FIXME: ログはslogを使うようにする。リファクタリングする。LLMを呼ぶ部分は非同期にする？
-
-// TODO: MySQLのサンプルデータベースを使って動作確認できるplaygroundを作る。フロントエンドも作る
 
 const (
 	SCHEMA_FILE_PATH = "schema.yaml"
 )
 
-func readFile(filePath string) string {
+func readFile(filePath string) (string, error) {
 	content, err := os.ReadFile(filePath)
 	if err != nil {
-		log.Fatalf("Failed to read file: %v", err)
+		slog.Error("failed to read file", "error", err.Error())
+		return "", fmt.Errorf("failed to read file: %v", err)
 	}
 
-	return string(content)
+	return string(content), nil
 }
 
-func getData(sql string) string {
+func getData(sql string) (string, error) {
 	data := sql
-	return data
+	return data, nil
 }
 
-func createVisualizableData(data string) string {
+func createVisualizableData(data string) (string, error) {
 	visualizableData := data
-	return visualizableData
+	return visualizableData, nil
 }
 
-func getVisualizableData(prompt string) string {
-	schema := readFile(SCHEMA_FILE_PATH)
-	sql := createQuery(schema, prompt)
-	d := getData(sql)
-	vd := createVisualizableData(d)
-	return vd
+func getVisualizableData(prompt string) (string, error) {
+	var vd string
+
+	schema, err := readFile(SCHEMA_FILE_PATH)
+	if err != nil {
+		return vd, err
+	}
+
+	sql, err := createQuery(schema, prompt)
+	if err != nil {
+		return vd, err
+	}
+
+	d, err := getData(sql)
+	if err != nil {
+		return vd, err
+	}
+
+	vd, err = createVisualizableData(d)
+	if err != nil {
+		return vd, err
+	}
+
+	return vd, nil
 }
