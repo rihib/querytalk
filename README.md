@@ -42,6 +42,7 @@ sequenceDiagram
 ### Frontend
 
 - TypeScript
+- Bun
 - Next.js
 - shadcn/ui
 - Recharts

@@ -10,6 +10,8 @@ bun --version
 bun create next-app
 cd frontend
 bun --bun run dev  # http://localhost:3000
+bunx --bun shadcn-ui@latest init
+bunx --bun shadcn-ui@latest add badge button drawer input label select textarea tooltip
 ```
 
 ## Getting Started
