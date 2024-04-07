@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Bird,
   Book,
@@ -43,7 +45,29 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
+import { useState } from 'react'
+import { chat } from './chat'
+
 export function Dashboard() {
+  const [userPrompt, setUserPrompt] = useState('');
+  const [visualizableData, setVisualizableData] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const chatResponse = await chat({ dbType: 'SQLite3', prompt: userPrompt });
+      if ('visualizableData' in chatResponse) {
+        setVisualizableData(chatResponse.visualizableData);
+      } else {
+        setError(`Error: ${chatResponse.message}`);
+      }
+    } catch (error) {
+      console.error(error);
+      setError('Failed to fetch visualizable data.');
+    }
+  };
+
   return (
     <div className="grid h-screen w-full pl-[56px]">
       <aside className="inset-y fixed  left-0 z-20 flex h-full flex-col border-r">
@@ -410,8 +434,23 @@ export function Dashboard() {
             <Badge variant="outline" className="absolute right-3 top-3">
               Output
             </Badge>
+
+            <div>
+              {visualizableData && (
+                <div>
+                  <strong>Visualizable Data:</strong> {visualizableData}
+                </div>
+              )}
+
+              {error && (
+                <div style={{ color: 'red' }}>
+                  {error}
+                </div>
+              )}
+            </div>
+
             <div className="flex-1" />
-            <form
+            <form onSubmit={handleSendMessage}
               className="relative overflow-hidden rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring" x-chunk="dashboard-03-chunk-1"
             >
               <Label htmlFor="message" className="sr-only">
@@ -419,6 +458,8 @@ export function Dashboard() {
               </Label>
               <Textarea
                 id="message"
+                value={userPrompt}
+                onChange={(e) => setUserPrompt(e.target.value)}
                 placeholder="Type your message here..."
                 className="min-h-12 resize-none border-0 p-3 shadow-none focus-visible:ring-0"
               />
