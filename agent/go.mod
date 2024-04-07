@@ -6,6 +6,7 @@ require (
 	github.com/go-faster/errors v0.7.1
 	github.com/go-faster/jx v1.1.0
 	github.com/joho/godotenv v1.5.1
+	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/ogen-go/ogen v1.0.0
 	github.com/sashabaranov/go-openai v1.20.4
 	go.opentelemetry.io/otel v1.25.0

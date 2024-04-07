@@ -5,8 +5,8 @@
 ```mermaid
 sequenceDiagram
   actor User
+  participant Frontend
   box User System
-    participant Frontend
     participant Agent
     participant User DB
   end
@@ -17,7 +17,7 @@ sequenceDiagram
   end
 
   User ->> Frontend: Send prompt
-  Note over Frontend, Agent: REST API
+  Note over Frontend, Agent: REST API (VPN)
   Frontend ->> Agent: Request (prompt)
   Note over Agent, Backend: gRPC
   Agent ->> Backend: Request (dbType, schema, prompt)
@@ -44,6 +44,7 @@ sequenceDiagram
 - TypeScript
 - Next.js
 - shadcn/ui
+- Recharts
 
 ### Agent
 
@@ -67,7 +68,7 @@ sequenceDiagram
 ### LLM
 
 - Python
-- FastAPI
+- gRPC
 - OpenAI
 
 ### Database

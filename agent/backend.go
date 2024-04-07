@@ -38,20 +38,18 @@ func extarctQuery(output string) (string, error) {
 }
 
 func createQuery(dbType string, schema string, prompt string) (string, error) {
-	var sql string
-
 	sp := createSysPrompt(schema)
 	up := createUserPrompt(dbType, prompt)
 
 	output, err := gpt4(sp, up)
 	if err != nil {
-		return sql, err
+		return "", err
 	}
 
-	sql, err = extarctQuery(output)
+	query, err := extarctQuery(output)
 	if err != nil {
-		return sql, err
+		return "", err
 	}
 
-	return sql, nil
+	return query, nil
 }

@@ -14,12 +14,10 @@ import (
 // FIXME: Clean Architecture
 
 func gpt4(sysPrompt string, userPrompt string) (string, error) {
-	var output string
-
 	err := godotenv.Load()
 	if err != nil {
-		slog.Error("error loading .env file", "message", err.Error())
-		return output, fmt.Errorf("error loading .env file: %v", err)
+		slog.Error("error loading .env file", "msg", err.Error())
+		return "", fmt.Errorf("error loading .env file: %v", err)
 	}
 
 	OPENAI_API_KEY := os.Getenv("OPENAI_API_KEY")
@@ -42,11 +40,11 @@ func gpt4(sysPrompt string, userPrompt string) (string, error) {
 		},
 	)
 	if err != nil {
-		slog.Warn("openai chat completion error", "message", err.Error())
-		return output, fmt.Errorf("openai chat completion error: %v", err)
+		slog.Warn("openai chat completion error", "msg", err.Error())
+		return "", fmt.Errorf("openai chat completion error: %v", err)
 	}
 
-	output = resp.Choices[0].Message.Content
+	output := resp.Choices[0].Message.Content
 	slog.Info("openai chat completion response", "output", output)
 	return output, nil
 }

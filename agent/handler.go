@@ -11,23 +11,22 @@ import (
 type chatService struct{}
 
 func (s *chatService) SendMSG(ctx context.Context, req ogen.OptMSG) (*ogen.VisualizableData, error) {
-	var res ogen.VisualizableData
-
 	if !req.Set {
 		slog.Info("prompt not set")
-		return &res, fmt.Errorf("prompt not set")
+		return nil, fmt.Errorf("prompt not set")
 	}
 
 	vd, err := getVisualizableData(req.Value.DbType.Value, req.Value.Prompt.Value)
 	if err != nil {
-		return &res, err
+		return nil, err
 	}
 
+	var res ogen.VisualizableData
 	res.VisualizableData = vd
 	return &res, nil
 }
 
 func (s *chatService) NewError(ctx context.Context, err error) *ogen.ErrorStatusCode {
-	slog.Error("internal server error", "message", err.Error())
-	return &ogen.ErrorStatusCode{StatusCode: 500, Response: ogen.Error{Code: 0, Message: "internal server error"}}
+	slog.Error("failed to visualize data", "msg", err.Error())
+	return &ogen.ErrorStatusCode{StatusCode: 500, Response: ogen.Error{Code: 0, Message: "Failed to visualize data"}}
 }

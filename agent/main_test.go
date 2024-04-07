@@ -11,15 +11,16 @@ import (
 // TODO: Create comprehensive tests for chat API
 
 const (
-	BASEURL = "http://localhost:8080"
+	BASEURL  = "http://localhost:8080"
+	DB_TYPE  = "SQLite3"
+	PROMPT   = "How many customers?"
+	EXPECTED = `{"rows":[{"COUNT(*)":59}]}`
 )
 
 func run(ctx context.Context, dbType string, prompt string) (*ogen.VisualizableData, error) {
-	var r *ogen.VisualizableData
-
 	c, err := ogen.NewClient(BASEURL)
 	if err != nil {
-		return r, fmt.Errorf("create client: %w", err)
+		return nil, fmt.Errorf("create client: %w", err)
 	}
 
 	request := ogen.OptMSG{
@@ -29,25 +30,21 @@ func run(ctx context.Context, dbType string, prompt string) (*ogen.VisualizableD
 		},
 		Set: true,
 	}
-	r, err = c.SendMSG(ctx, request)
+	r, err := c.SendMSG(ctx, request)
 	if err != nil {
-		return r, fmt.Errorf("send prompt: %w", err)
+		return nil, fmt.Errorf("send prompt: %w", err)
 	}
 
 	return r, nil
 }
 
 func TestChatAPI(t *testing.T) {
-	d := "SQLite3"
-	p := "How many customers?"
-	e := "SELECT COUNT(*) FROM customers;"
-
-	r, err := run(context.Background(), d, p)
+	r, err := run(context.Background(), DB_TYPE, PROMPT)
 	if err != nil {
 		t.Fatalf("unexpected error: %+v", err)
 	}
 
-	if r.VisualizableData != e {
-		t.Errorf("test failed: got `%v` expected `%v`", r.VisualizableData, e)
+	if r.VisualizableData != EXPECTED {
+		t.Errorf("test failed: got `%v` expected `%v`", r.VisualizableData, EXPECTED)
 	}
 }
