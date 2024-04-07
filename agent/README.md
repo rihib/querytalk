@@ -2,13 +2,13 @@
 
 ## Generate API Code
 
-```bash
+```zsh
 go run github.com/ogen-go/ogen/cmd/ogen@latest --target ogen --clean api/openapi.json
 ```
 
 ## Create schema.sql
 
-```bash
+```zsh
 $ brew install sqlite
 $ sqlite3 chinook.db
 sqlite> .tables
@@ -21,18 +21,18 @@ sqlite> .exit
 
 ## Run Server
 
-```bash
+```zsh
 go run main.go handler.go agent.go backend.go llm.go
 ```
 
 ## Run Test
 
-```bash
+```zsh
 go clean -testcache
 go test -v
 ```
 
-```bash
+```zsh
 % curl -X "POST" -H "Content-Type: application/json" --data "{\"prompt\":\"Cat\"}" http://localhost:8080/v0.0.1/chat
 {"visualizableData":"Cat"}
 % curl -X "POST" -H "Content-Type: application/json" http://localhost:8080/v0.0.1/chat
