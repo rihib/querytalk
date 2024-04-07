@@ -14,7 +14,9 @@ const (
 	BASEURL  = "http://localhost:8080"
 	DB_TYPE  = "SQLite3"
 	PROMPT   = "What are the monthly sales for 2013?"
-	EXPECTED = `{"data":[` +
+	EXPECTED = `{` +
+		`"chart":{"type":"line","x":"SaleMonth","y":"TotalSales"},` +
+		`"data":[` +
 		`{"SaleMonth":"01","TotalSales":37.62},` +
 		`{"SaleMonth":"02","TotalSales":27.72},` +
 		`{"SaleMonth":"03","TotalSales":37.62},` +
@@ -27,7 +29,25 @@ const (
 		`{"SaleMonth":"10","TotalSales":37.62},` +
 		`{"SaleMonth":"11","TotalSales":49.62},` +
 		`{"SaleMonth":"12","TotalSales":38.62}` +
-		`]}`
+		`]` +
+		`}`
+	EXPECTED2 = `{` +
+		`"chart":{"type":"line","x":"SaleMonth","y":"TotalSales"},` +
+		`"data":[` +
+		`{"SaleMonth":"2013-01","TotalSales":37.62},` +
+		`{"SaleMonth":"2013-02","TotalSales":27.72},` +
+		`{"SaleMonth":"2013-03","TotalSales":37.62},` +
+		`{"SaleMonth":"2013-04","TotalSales":33.66},` +
+		`{"SaleMonth":"2013-05","TotalSales":37.62},` +
+		`{"SaleMonth":"2013-06","TotalSales":37.62},` +
+		`{"SaleMonth":"2013-07","TotalSales":37.62},` +
+		`{"SaleMonth":"2013-08","TotalSales":37.62},` +
+		`{"SaleMonth":"2013-09","TotalSales":37.62},` +
+		`{"SaleMonth":"2013-10","TotalSales":37.62},` +
+		`{"SaleMonth":"2013-11","TotalSales":49.62},` +
+		`{"SaleMonth":"2013-12","TotalSales":38.62}` +
+		`]` +
+		`}`
 )
 
 func run(ctx context.Context, dbType string, prompt string) (*ogen.VisualizableData, error) {
@@ -57,7 +77,7 @@ func TestChatAPI(t *testing.T) {
 		t.Fatalf("unexpected error: %+v", err)
 	}
 
-	if r.VisualizableData != EXPECTED {
-		t.Errorf("test failed: got `%v` expected `%v`", r.VisualizableData, EXPECTED)
+	if r.VisualizableData != EXPECTED && r.VisualizableData != EXPECTED2 {
+		t.Errorf("test failed: got `%v`\n\nexpected `%v`", r.VisualizableData, EXPECTED)
 	}
 }

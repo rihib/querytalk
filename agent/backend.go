@@ -65,31 +65,44 @@ func createUserPrompt(dbType string, prompt string) string {
 	return fmt.Sprintf(USER_PROMPT, dbType, prompt, dbType)
 }
 
-func extarctQuery(output string) (string, error) {
-	pattern := regexp.MustCompile("(?s)```sql\n(.+?)\n```")
+func extractPattern(output string, patternType string) (string, error) {
+	pattern := regexp.MustCompile(fmt.Sprintf("(?s)```%s\n(.+?)\n```", patternType))
 	matches := pattern.FindStringSubmatch(output)
 
 	if len(matches) <= 1 {
-		slog.Info("query not found", "output", output)
-		return "", fmt.Errorf("query not found")
+		slog.Info(fmt.Sprintf("%s not found", patternType), "output", output)
+		return "", fmt.Errorf("%s not found", patternType)
 	}
 
 	return matches[1], nil
 }
 
-func createQuery(dbType string, schema string, prompt string) (string, error) {
+func extractQuery(output string) (string, error) {
+	return extractPattern(output, "sql")
+}
+
+func extractData(output string) (string, error) {
+	return extractPattern(output, "json")
+}
+
+func createQueryAndData(dbType string, schema string, prompt string) (string, string, error) {
 	sp := createSysPrompt(schema)
 	up := createUserPrompt(dbType, prompt)
 
 	output, err := gpt4(sp, up)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
-	query, err := extarctQuery(output)
+	query, err := extractQuery(output)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
-	return query, nil
+	data, err := extractData(output)
+	if err != nil {
+		return "", "", err
+	}
+
+	return query, data, nil
 }
