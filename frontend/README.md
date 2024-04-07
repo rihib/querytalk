@@ -2,37 +2,14 @@
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Install
-
-### Node.js
+## Installation
 
 ```zsh
-brew install nodebrew
-/opt/homebrew/opt/nodebrew/bin/nodebrew setup_dirs
-echo "export PATH=$HOME/.nodebrew/current/bin:$PATH" >> ~/.zprofile
-source  ~/.zprofile
-nodebrew install stable
-nodebrew use stable
-nodebrew ls
-node -v
-npm -v
-```
-
-### Next.js
-
-```zsh
-% npx create-next-app@latest
-Need to install the following packages:
-create-next-app@14.1.4
-Ok to proceed? (y) y
-✔ What is your project named? … query-chat
-✔ Would you like to use TypeScript? … No / Yes
-✔ Would you like to use ESLint? … No / Yes
-✔ Would you like to use Tailwind CSS? … No / Yes
-✔ Would you like to use `src/` directory? … No / Yes
-✔ Would you like to use App Router? (recommended) … No / Yes
-✔ Would you like to customize the default import alias (@/*)? … No / Yes
-Creating a new Next.js app in /Users/rihib/dev/querychat/frontend/query-chat.
+brew install oven-sh/bun/bun
+bun --version
+bun create next-app
+cd frontend
+bun --bun run dev  # http://localhost:3000
 ```
 
 ## Getting Started
