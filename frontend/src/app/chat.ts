@@ -15,7 +15,7 @@ type ChatError = {
 type ChatResponse = VisualizableData | ChatError;
 
 export async function chat(msg: MSG): Promise<ChatResponse> {
-  const response = await fetch('https://localhost:8080/v0.0.1/chat', {
+  const response = await fetch('http://localhost:8080/v0.0.1/chat', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
