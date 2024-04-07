@@ -28,6 +28,7 @@ go run main.go handler.go agent.go backend.go llm.go
 ## Run Test
 
 ```bash
+go clean -testcache
 go test -v
 ```
 

@@ -36,7 +36,7 @@ func rows2JSON(rows *sql.Rows) (string, error) {
 	}
 
 	var result struct {
-		Rows []map[string]interface{} `json:"rows"`
+		Rows []map[string]interface{} `json:"data"`
 	}
 
 	for rows.Next() {
@@ -75,13 +75,13 @@ func rows2JSON(rows *sql.Rows) (string, error) {
 		return "", fmt.Errorf("failed to get rows: %v", err)
 	}
 
-	jsonData, err := json.Marshal(result)
+	jsonResult, err := json.Marshal(result)
 	if err != nil {
 		slog.Error("failed to marshal JSON", "msg", err.Error())
 		return "", fmt.Errorf("failed to marshal JSON: %v", err)
 	}
 
-	return string(jsonData), nil
+	return string(jsonResult), nil
 }
 
 func getData(query string) (string, error) {
@@ -98,14 +98,13 @@ func getData(query string) (string, error) {
 		return "", fmt.Errorf("failed to query database: %v", err)
 	}
 
-	d, err := rows2JSON(rows)
+	r, err := rows2JSON(rows)
 	if err != nil {
-		slog.Error("failed to convert rows to JSON", "msg", err.Error())
-		return "", fmt.Errorf("failed to convert rows to JSON: %v", err)
+		return "", err
 	}
 	defer rows.Close()
 
-	return d, nil
+	return r, nil
 }
 
 func getVisualizableData(dbType string, prompt string) (string, error) {
