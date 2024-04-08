@@ -10,7 +10,7 @@ import (
 
 type chatService struct{}
 
-func (s *chatService) SendMSG(ctx context.Context, req ogen.OptMSG) (*ogen.VisualizableData, error) {
+func (s *chatService) SendMSG(ctx context.Context, req ogen.OptMSG) (*ogen.VisualizableDataHeaders, error) {
 	if !req.Set {
 		slog.Info("prompt not set")
 		return nil, fmt.Errorf("prompt not set")
@@ -21,8 +21,21 @@ func (s *chatService) SendMSG(ctx context.Context, req ogen.OptMSG) (*ogen.Visua
 		return nil, err
 	}
 
-	var res ogen.VisualizableData
-	res.VisualizableData = vd
+	var res ogen.VisualizableDataHeaders
+
+	res.AccessControlAllowHeaders.Value = "Content-Type"
+	res.AccessControlAllowHeaders.Set = true
+
+	res.AccessControlAllowMethods.Value = "POST, GET, OPTIONS"
+	res.AccessControlAllowMethods.Set = true
+
+	res.AccessControlAllowOrigin.Value = "http://localhost:3000"
+	res.AccessControlAllowOrigin.Set = true
+
+	res.AccessControlMaxAge.Value = 3600
+	res.AccessControlMaxAge.Set = true
+
+	res.Response.VisualizableData = vd
 	return &res, nil
 }
 

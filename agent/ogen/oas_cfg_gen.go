@@ -85,6 +85,8 @@ func newServerConfig(opts ...ServerOption) serverConfig {
 			if r.Method == "OPTIONS" {
 				w.Header().Set("Access-Control-Allow-Methods", allowed)
 				w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+				w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+				w.Header().Set("Access-Control-Max-Age", "3600")
 				status = http.StatusNoContent
 			} else {
 				w.Header().Set("Allow", allowed)

@@ -89,6 +89,52 @@ func (s *MSG) SetPrompt(val OptString) {
 	s.Prompt = val
 }
 
+// NewOptInt returns new OptInt with value set to v.
+func NewOptInt(v int) OptInt {
+	return OptInt{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptInt is optional int.
+type OptInt struct {
+	Value int
+	Set   bool
+}
+
+// IsSet returns true if OptInt was set.
+func (o OptInt) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptInt) Reset() {
+	var v int
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptInt) SetTo(v int) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptInt) Get() (v int, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptInt) Or(d int) int {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptMSG returns new OptMSG with value set to v.
 func NewOptMSG(v MSG) OptMSG {
 	return OptMSG{
@@ -194,4 +240,63 @@ func (s *VisualizableData) GetVisualizableData() string {
 // SetVisualizableData sets the value of VisualizableData.
 func (s *VisualizableData) SetVisualizableData(val string) {
 	s.VisualizableData = val
+}
+
+// VisualizableDataHeaders wraps VisualizableData with response headers.
+type VisualizableDataHeaders struct {
+	AccessControlAllowHeaders OptString
+	AccessControlAllowMethods OptString
+	AccessControlAllowOrigin  OptString
+	AccessControlMaxAge       OptInt
+	Response                  VisualizableData
+}
+
+// GetAccessControlAllowHeaders returns the value of AccessControlAllowHeaders.
+func (s *VisualizableDataHeaders) GetAccessControlAllowHeaders() OptString {
+	return s.AccessControlAllowHeaders
+}
+
+// GetAccessControlAllowMethods returns the value of AccessControlAllowMethods.
+func (s *VisualizableDataHeaders) GetAccessControlAllowMethods() OptString {
+	return s.AccessControlAllowMethods
+}
+
+// GetAccessControlAllowOrigin returns the value of AccessControlAllowOrigin.
+func (s *VisualizableDataHeaders) GetAccessControlAllowOrigin() OptString {
+	return s.AccessControlAllowOrigin
+}
+
+// GetAccessControlMaxAge returns the value of AccessControlMaxAge.
+func (s *VisualizableDataHeaders) GetAccessControlMaxAge() OptInt {
+	return s.AccessControlMaxAge
+}
+
+// GetResponse returns the value of Response.
+func (s *VisualizableDataHeaders) GetResponse() VisualizableData {
+	return s.Response
+}
+
+// SetAccessControlAllowHeaders sets the value of AccessControlAllowHeaders.
+func (s *VisualizableDataHeaders) SetAccessControlAllowHeaders(val OptString) {
+	s.AccessControlAllowHeaders = val
+}
+
+// SetAccessControlAllowMethods sets the value of AccessControlAllowMethods.
+func (s *VisualizableDataHeaders) SetAccessControlAllowMethods(val OptString) {
+	s.AccessControlAllowMethods = val
+}
+
+// SetAccessControlAllowOrigin sets the value of AccessControlAllowOrigin.
+func (s *VisualizableDataHeaders) SetAccessControlAllowOrigin(val OptString) {
+	s.AccessControlAllowOrigin = val
+}
+
+// SetAccessControlMaxAge sets the value of AccessControlMaxAge.
+func (s *VisualizableDataHeaders) SetAccessControlMaxAge(val OptInt) {
+	s.AccessControlMaxAge = val
+}
+
+// SetResponse sets the value of Response.
+func (s *VisualizableDataHeaders) SetResponse(val VisualizableData) {
+	s.Response = val
 }

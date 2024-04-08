@@ -68,7 +68,7 @@ func run(ctx context.Context, dbType string, prompt string) (*ogen.VisualizableD
 		return nil, fmt.Errorf("send prompt: %w", err)
 	}
 
-	return r, nil
+	return &r.Response, nil
 }
 
 func TestChatAPI(t *testing.T) {

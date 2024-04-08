@@ -78,7 +78,7 @@ func (s *Server) handleSendMSGRequest(args [0]string, argsEscaped bool, w http.R
 		}
 	}()
 
-	var response *VisualizableData
+	var response *VisualizableDataHeaders
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -93,7 +93,7 @@ func (s *Server) handleSendMSGRequest(args [0]string, argsEscaped bool, w http.R
 		type (
 			Request  = OptMSG
 			Params   = struct{}
-			Response = *VisualizableData
+			Response = *VisualizableDataHeaders
 		)
 		response, err = middleware.HookMiddleware[
 			Request,

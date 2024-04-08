@@ -27,7 +27,7 @@ type Invoker interface {
 	// Send message to the server.
 	//
 	// POST /v0.0.1/chat
-	SendMSG(ctx context.Context, request OptMSG) (*VisualizableData, error)
+	SendMSG(ctx context.Context, request OptMSG) (*VisualizableDataHeaders, error)
 }
 
 // Client implements OAS client.
@@ -87,12 +87,12 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 // Send message to the server.
 //
 // POST /v0.0.1/chat
-func (c *Client) SendMSG(ctx context.Context, request OptMSG) (*VisualizableData, error) {
+func (c *Client) SendMSG(ctx context.Context, request OptMSG) (*VisualizableDataHeaders, error) {
 	res, err := c.sendSendMSG(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendSendMSG(ctx context.Context, request OptMSG) (res *VisualizableData, err error) {
+func (c *Client) sendSendMSG(ctx context.Context, request OptMSG) (res *VisualizableDataHeaders, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("sendMSG"),
 		semconv.HTTPMethodKey.String("POST"),

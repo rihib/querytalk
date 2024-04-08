@@ -10,16 +10,82 @@ import (
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/trace"
 
+	"github.com/ogen-go/ogen/conv"
 	ht "github.com/ogen-go/ogen/http"
+	"github.com/ogen-go/ogen/uri"
 )
 
-func encodeSendMSGResponse(response *VisualizableData, w http.ResponseWriter, span trace.Span) error {
+func encodeSendMSGResponse(response *VisualizableDataHeaders, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	// Encoding response headers.
+	{
+		h := uri.NewHeaderEncoder(w.Header())
+		// Encode "Access-Control-Allow-Headers" header.
+		{
+			cfg := uri.HeaderParameterEncodingConfig{
+				Name:    "Access-Control-Allow-Headers",
+				Explode: false,
+			}
+			if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+				if val, ok := response.AccessControlAllowHeaders.Get(); ok {
+					return e.EncodeValue(conv.StringToString(val))
+				}
+				return nil
+			}); err != nil {
+				return errors.Wrap(err, "encode Access-Control-Allow-Headers header")
+			}
+		}
+		// Encode "Access-Control-Allow-Methods" header.
+		{
+			cfg := uri.HeaderParameterEncodingConfig{
+				Name:    "Access-Control-Allow-Methods",
+				Explode: false,
+			}
+			if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+				if val, ok := response.AccessControlAllowMethods.Get(); ok {
+					return e.EncodeValue(conv.StringToString(val))
+				}
+				return nil
+			}); err != nil {
+				return errors.Wrap(err, "encode Access-Control-Allow-Methods header")
+			}
+		}
+		// Encode "Access-Control-Allow-Origin" header.
+		{
+			cfg := uri.HeaderParameterEncodingConfig{
+				Name:    "Access-Control-Allow-Origin",
+				Explode: false,
+			}
+			if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+				if val, ok := response.AccessControlAllowOrigin.Get(); ok {
+					return e.EncodeValue(conv.StringToString(val))
+				}
+				return nil
+			}); err != nil {
+				return errors.Wrap(err, "encode Access-Control-Allow-Origin header")
+			}
+		}
+		// Encode "Access-Control-Max-Age" header.
+		{
+			cfg := uri.HeaderParameterEncodingConfig{
+				Name:    "Access-Control-Max-Age",
+				Explode: false,
+			}
+			if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+				if val, ok := response.AccessControlMaxAge.Get(); ok {
+					return e.EncodeValue(conv.IntToString(val))
+				}
+				return nil
+			}); err != nil {
+				return errors.Wrap(err, "encode Access-Control-Max-Age header")
+			}
+		}
+	}
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
-	response.Encode(e)
+	response.Response.Encode(e)
 	if _, err := e.WriteTo(w); err != nil {
 		return errors.Wrap(err, "write")
 	}

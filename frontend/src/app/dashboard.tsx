@@ -45,21 +45,22 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-import { useState } from 'react'
-import { chat } from './chat'
+import React, { useState } from 'react'
+import { CartesianGrid, Legend, Line, LineChart, XAxis, YAxis } from 'recharts'
+import { VisualizableData, chat, isChatError, isVisualizableData } from './chat'
 
 export function Dashboard() {
   const [userPrompt, setUserPrompt] = useState('');
-  const [visualizableData, setVisualizableData] = useState('');
+  const [visualizableData, setVisualizableData] = useState<VisualizableData | null>(null);
   const [error, setError] = useState('');
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const chatResponse = await chat({ dbType: 'SQLite3', prompt: userPrompt });
-      if ('visualizableData' in chatResponse) {
-        setVisualizableData(chatResponse.visualizableData);
-      } else {
+      if (isVisualizableData(chatResponse)) {
+        setVisualizableData(chatResponse);
+      } else if (isChatError(chatResponse)) {
         setError(`Error: ${chatResponse.message}`);
       }
     } catch (error) {
@@ -437,9 +438,25 @@ export function Dashboard() {
 
             <div>
               {visualizableData && (
-                <div>
-                  <strong>Visualizable Data:</strong> {visualizableData}
-                </div>
+                // <ResponsiveContainer width="100%" height="100%">
+                  <LineChart
+                    width={500}
+                    height={300}
+                    data={visualizableData.data}
+                    margin={{
+                      top: 5, right: 30, left: 20, bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    {/* <XAxis dataKey={visualizableData.chart.x} /> */}
+                    <XAxis dataKey="SaleMonth" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    {/* <Line type="monotone" dataKey={visualizableData.chart.y} stroke="#8884d8" /> */}
+                    <Line type="monotone" dataKey="TotalSales" stroke="#8884d8" />
+                  </LineChart>
+                // </ResponsiveContainer>
               )}
 
               {error && (

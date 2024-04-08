@@ -28,6 +28,32 @@
         "responses": {
           "200": {
             "description":"Successful operation",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "description": "This is used to specify the CORS policy for the API.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Methods": {
+                "description": "This is used to specify the allowed HTTP methods for the API.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Headers": {
+                "description": "This is used to specify the allowed headers for the API.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Max-Age": {
+                "description": "This is used to specify the maximum amount of time that the results of a preflight request can be cached.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {

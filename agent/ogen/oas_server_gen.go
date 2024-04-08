@@ -13,7 +13,7 @@ type Handler interface {
 	// Send message to the server.
 	//
 	// POST /v0.0.1/chat
-	SendMSG(ctx context.Context, req OptMSG) (*VisualizableData, error)
+	SendMSG(ctx context.Context, req OptMSG) (*VisualizableDataHeaders, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

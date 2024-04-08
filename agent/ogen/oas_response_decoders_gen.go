@@ -10,11 +10,13 @@ import (
 	"github.com/go-faster/errors"
 	"github.com/go-faster/jx"
 
+	"github.com/ogen-go/ogen/conv"
 	"github.com/ogen-go/ogen/ogenerrors"
+	"github.com/ogen-go/ogen/uri"
 	"github.com/ogen-go/ogen/validate"
 )
 
-func decodeSendMSGResponse(resp *http.Response) (res *VisualizableData, _ error) {
+func decodeSendMSGResponse(resp *http.Response) (res *VisualizableDataHeaders, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -47,7 +49,158 @@ func decodeSendMSGResponse(resp *http.Response) (res *VisualizableData, _ error)
 				}
 				return res, err
 			}
-			return &response, nil
+			var wrapper VisualizableDataHeaders
+			wrapper.Response = response
+			h := uri.NewHeaderDecoder(resp.Header)
+			// Parse "Access-Control-Allow-Headers" header.
+			{
+				cfg := uri.HeaderParameterDecodingConfig{
+					Name:    "Access-Control-Allow-Headers",
+					Explode: false,
+				}
+				if err := func() error {
+					if err := h.HasParam(cfg); err == nil {
+						if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
+							var wrapperDotAccessControlAllowHeadersVal string
+							if err := func() error {
+								val, err := d.DecodeValue()
+								if err != nil {
+									return err
+								}
+
+								c, err := conv.ToString(val)
+								if err != nil {
+									return err
+								}
+
+								wrapperDotAccessControlAllowHeadersVal = c
+								return nil
+							}(); err != nil {
+								return err
+							}
+							wrapper.AccessControlAllowHeaders.SetTo(wrapperDotAccessControlAllowHeadersVal)
+							return nil
+						}); err != nil {
+							return err
+						}
+					}
+					return nil
+				}(); err != nil {
+					return res, errors.Wrap(err, "parse Access-Control-Allow-Headers header")
+				}
+			}
+			// Parse "Access-Control-Allow-Methods" header.
+			{
+				cfg := uri.HeaderParameterDecodingConfig{
+					Name:    "Access-Control-Allow-Methods",
+					Explode: false,
+				}
+				if err := func() error {
+					if err := h.HasParam(cfg); err == nil {
+						if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
+							var wrapperDotAccessControlAllowMethodsVal string
+							if err := func() error {
+								val, err := d.DecodeValue()
+								if err != nil {
+									return err
+								}
+
+								c, err := conv.ToString(val)
+								if err != nil {
+									return err
+								}
+
+								wrapperDotAccessControlAllowMethodsVal = c
+								return nil
+							}(); err != nil {
+								return err
+							}
+							wrapper.AccessControlAllowMethods.SetTo(wrapperDotAccessControlAllowMethodsVal)
+							return nil
+						}); err != nil {
+							return err
+						}
+					}
+					return nil
+				}(); err != nil {
+					return res, errors.Wrap(err, "parse Access-Control-Allow-Methods header")
+				}
+			}
+			// Parse "Access-Control-Allow-Origin" header.
+			{
+				cfg := uri.HeaderParameterDecodingConfig{
+					Name:    "Access-Control-Allow-Origin",
+					Explode: false,
+				}
+				if err := func() error {
+					if err := h.HasParam(cfg); err == nil {
+						if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
+							var wrapperDotAccessControlAllowOriginVal string
+							if err := func() error {
+								val, err := d.DecodeValue()
+								if err != nil {
+									return err
+								}
+
+								c, err := conv.ToString(val)
+								if err != nil {
+									return err
+								}
+
+								wrapperDotAccessControlAllowOriginVal = c
+								return nil
+							}(); err != nil {
+								return err
+							}
+							wrapper.AccessControlAllowOrigin.SetTo(wrapperDotAccessControlAllowOriginVal)
+							return nil
+						}); err != nil {
+							return err
+						}
+					}
+					return nil
+				}(); err != nil {
+					return res, errors.Wrap(err, "parse Access-Control-Allow-Origin header")
+				}
+			}
+			// Parse "Access-Control-Max-Age" header.
+			{
+				cfg := uri.HeaderParameterDecodingConfig{
+					Name:    "Access-Control-Max-Age",
+					Explode: false,
+				}
+				if err := func() error {
+					if err := h.HasParam(cfg); err == nil {
+						if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
+							var wrapperDotAccessControlMaxAgeVal int
+							if err := func() error {
+								val, err := d.DecodeValue()
+								if err != nil {
+									return err
+								}
+
+								c, err := conv.ToInt(val)
+								if err != nil {
+									return err
+								}
+
+								wrapperDotAccessControlMaxAgeVal = c
+								return nil
+							}(); err != nil {
+								return err
+							}
+							wrapper.AccessControlMaxAge.SetTo(wrapperDotAccessControlMaxAgeVal)
+							return nil
+						}); err != nil {
+							return err
+						}
+					}
+					return nil
+				}(); err != nil {
+					return res, errors.Wrap(err, "parse Access-Control-Max-Age header")
+				}
+			}
+			return &wrapper, nil
 		default:
 			return res, validate.InvalidContentType(ct)
 		}

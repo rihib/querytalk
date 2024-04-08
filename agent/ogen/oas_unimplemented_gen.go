@@ -18,7 +18,7 @@ var _ Handler = UnimplementedHandler{}
 // Send message to the server.
 //
 // POST /v0.0.1/chat
-func (UnimplementedHandler) SendMSG(ctx context.Context, req OptMSG) (r *VisualizableData, _ error) {
+func (UnimplementedHandler) SendMSG(ctx context.Context, req OptMSG) (r *VisualizableDataHeaders, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
