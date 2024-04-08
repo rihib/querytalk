@@ -69,6 +69,19 @@ export function Dashboard() {
     }
   };
 
+  const data_example = [{"SaleMonth":"01","TotalSales":37.62},
+                        {"SaleMonth":"02","TotalSales":27.72},
+                        {"SaleMonth":"03","TotalSales":37.62},
+                        {"SaleMonth":"04","TotalSales":33.66},
+                        {"SaleMonth":"05","TotalSales":37.62},
+                        {"SaleMonth":"06","TotalSales":37.62},
+                        {"SaleMonth":"07","TotalSales":37.62},
+                        {"SaleMonth":"08","TotalSales":37.62},
+                        {"SaleMonth":"09","TotalSales":37.62},
+                        {"SaleMonth":"10","TotalSales":37.62},
+                        {"SaleMonth":"11","TotalSales":49.62},
+                        {"SaleMonth":"12","TotalSales":38.62}];
+
   return (
     <div className="grid h-screen w-full pl-[56px]">
       <aside className="inset-y fixed  left-0 z-20 flex h-full flex-col border-r">
@@ -442,7 +455,7 @@ export function Dashboard() {
                   <LineChart
                     width={500}
                     height={300}
-                    data={visualizableData.data}
+                    data={data_example}
                     margin={{
                       top: 5, right: 30, left: 20, bottom: 5,
                     }}
