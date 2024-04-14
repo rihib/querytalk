@@ -50,9 +50,9 @@ import { CartesianGrid, Legend, Line, LineChart, XAxis, YAxis } from 'recharts'
 import { VisualizableData, chat, isChatError, isVisualizableData } from './chat'
 
 export function Dashboard() {
-  const [userPrompt, setUserPrompt] = useState('');
+  const [userPrompt, setUserPrompt] = useState<string>('');
   const [visualizableData, setVisualizableData] = useState<VisualizableData | null>(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string>('');
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,10 +62,12 @@ export function Dashboard() {
         setVisualizableData(chatResponse);
       } else if (isChatError(chatResponse)) {
         setError(`Error: ${chatResponse.message}`);
+      } else {
+        setError('API Error: Failed to fetch visualizable data');
       }
     } catch (error) {
       console.error(error);
-      setError('Failed to fetch visualizable data.');
+      setError('Unexpected Error: Failed to fetch visualizable data');
     }
   };
 

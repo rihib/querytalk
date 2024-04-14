@@ -1,4 +1,4 @@
-export type MSG = {
+type MSG = {
   dbType: string;
   prompt: string;
 };
@@ -9,7 +9,7 @@ export type VisualizableData = {
     x: string;
     y: string;
   };
-  data: Array<{ [key: string]: string | number }>;
+  data: Record<string, string | number>[];
 };
 
 type ChatError = {
@@ -20,11 +20,18 @@ type ChatError = {
 type ChatResponse = VisualizableData | ChatError;
 
 export function isVisualizableData(response: any): response is VisualizableData {
-  return response && typeof response.visualizableData === 'string';
+  return response
+  && typeof response.chart === 'object'
+  && typeof response.chart.type === 'string'
+  && typeof response.chart.x === 'string'
+  && typeof response.chart.y === 'string'
+  && Array.isArray(response.data);
 }
 
 export function isChatError(response: any): response is ChatError {
-  return response && typeof response.code === 'number' && typeof response.message === 'string';
+  return response
+    && typeof response.code === 'number'
+    && typeof response.message === 'string';
 }
 
 export async function chat(msg: MSG): Promise<VisualizableData | ChatError> {

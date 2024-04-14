@@ -58,10 +58,12 @@ const (
 )
 
 func createSysPrompt(schema string) string {
+	// TODO: If the schema is empty or too long, return error
 	return fmt.Sprintf(SYS_PROMPT, schema)
 }
 
 func createUserPrompt(dbType string, prompt string) string {
+	// TODO: If the dbType and prompt is empty or too long, return error
 	return fmt.Sprintf(USER_PROMPT, dbType, prompt, dbType)
 }
 

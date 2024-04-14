@@ -6,6 +6,39 @@
 go run github.com/ogen-go/ogen/cmd/ogen@latest --target ogen --clean api/openapi.json
 ```
 
+## Change generated code
+
+Change `newServerConfig` function in `ogen/oas_cfg_gen.go` as follows:
+
+```go
+func newServerConfig(opts ...ServerOption) serverConfig {
+  cfg := serverConfig{
+    NotFound: http.NotFound,
+    MethodNotAllowed: func(w http.ResponseWriter, r *http.Request, allowed string) {
+      status := http.StatusMethodNotAllowed
+      if r.Method == "OPTIONS" {
+        w.Header().Set("Access-Control-Allow-Methods", allowed)
+        w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+        w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")  // Add
+        w.Header().Set("Access-Control-Max-Age", "3600")  // Add
+        status = http.StatusNoContent
+      } else {
+        w.Header().Set("Allow", allowed)
+      }
+      w.WriteHeader(status)
+    },
+    ErrorHandler:       ogenerrors.DefaultErrorHandler,
+    Middleware:         nil,
+    MaxMultipartMemory: 32 << 20, // 32 MB
+  }
+  for _, opt := range opts {
+    opt.applyServer(&cfg)
+  }
+  cfg.initOTEL()
+  return cfg
+}
+```
+
 ## Create schema.sql
 
 ```zsh
